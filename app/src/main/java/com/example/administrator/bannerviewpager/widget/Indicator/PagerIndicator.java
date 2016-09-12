@@ -32,7 +32,7 @@ public interface PagerIndicator extends ViewPager.OnPageChangeListener {
      *
      * @param currentItem currentItem
      */
-    void setCurrentItem(int currentItem);
+    void setCurrentItem(int currentItem, boolean smoothScroll);
 
     /**
      * the ViewPager ChangeListener

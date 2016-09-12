@@ -71,7 +71,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         }
 
         if (mCurrentPage >= count) {
-            setCurrentItem(count - 1);
+            setCurrentItem(count-1,true);
             return;
         }
 
@@ -144,15 +144,15 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     @Override
     public void bindViewPager(ViewPager view, int initialPosition) {
         bindViewPager(view);
-        setCurrentItem(initialPosition);
+        setCurrentItem(initialPosition,true);
     }
 
     @Override
-    public void setCurrentItem(int item) {
+    public void setCurrentItem(int item,boolean smoothScroll) {
         if (mViewPager == null) {
             throw new IllegalStateException("indicator has not bind ViewPager");
         }
-        mViewPager.setCurrentItem(item);
+        mViewPager.setCurrentItem(item,smoothScroll);
         mCurrentPage = item;
         invalidate();
     }
@@ -173,6 +173,11 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mCurrentPage = position;
+        if (mCurrentPage==1){
+            mCurrentPage=0;
+        }else if (mCurrentPage==mViewPager.getAdapter().getCount()-1){
+            mCurrentPage=mViewPager.getAdapter().getCount()-2;
+        }
         mPageOffset = positionOffset;
         //如果指示器跟随ViewPager缓慢滑动，那么滚动是时候都绘制界面
         if (mIsFollow) {
@@ -211,7 +216,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         if ((specMode == MeasureSpec.EXACTLY) || (mViewPager == null)) {
             width = specSize;
         } else {
-            final int count = mViewPager.getAdapter().getCount();
+            final int count = mViewPager.getAdapter().getCount()-2;
             width = (int) (getPaddingLeft() + getPaddingRight()
                     + (count * 2 * mRadius) + (mIndicatorRadius - mRadius) * 2 + (count - 1) * mIndicatorSpace);
             if (specMode == MeasureSpec.AT_MOST) {
