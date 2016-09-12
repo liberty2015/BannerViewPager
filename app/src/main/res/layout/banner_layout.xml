@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="@android:color/white">
+    <com.example.administrator.bannerviewpager.widget.BannerViewPager
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.example.administrator.bannerviewpager.widget.BannerViewPager>
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <com.example.administrator.bannerviewpager.widget.Indicator.CirclePagerIndicator
+            android:id="@+id/indicator"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            app:circle_indicator_centerHorizontal="true"
+            app:circle_indicator_color="@android:color/white"
+            app:circle_indicator_fill_color="@color/colorAccent"
+            app:circle_indicator_indicator_radius="3dp"
+            app:circle_indicator_radius="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -8,15 +8,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.administrator.bannerviewpager.MainActivity">
-    <RelativeLayout
+    <com.example.administrator.bannerviewpager.widget.BannerContainer
+        android:id="@+id/banner_container"
         android:layout_width="match_parent"
         android:layout_height="150dp">
-        <com.example.administrator.bannerviewpager.widget.BannerViewPager
-            android:id="@+id/banner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.example.administrator.bannerviewpager.widget.BannerViewPager>
-    </RelativeLayout>
+    </com.example.administrator.bannerviewpager.widget.BannerContainer>
 
     <TextView
         android:layout_width="wrap_content"

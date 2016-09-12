@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,6 +30,11 @@ public class BannerViewPager extends ViewPager {
     private int duration;
     private int currentPosition;
     private List<ImageView> imageList;
+    /**
+     * 判断手指是否正在滑动ViewPager
+     */
+    private boolean isScroll=false;
+    private boolean isMoving=false;
 
     private Thread moveThread=new Thread(){
         @Override
@@ -36,7 +42,9 @@ public class BannerViewPager extends ViewPager {
             while (true){
                 try {
                     sleep(duration);
-                    handler.sendEmptyMessage(0x11);
+                    if (!isMoving&&!isScroll){
+                        handler.sendEmptyMessage(0x11);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -69,7 +77,7 @@ public class BannerViewPager extends ViewPager {
 
     private void initView(){
 //        imageList=new ArrayList<>();
-        duration=2000;
+        duration=4000;
         this.setAdapter(new BannerPagerAdapter());
         this.addOnPageChangeListener(new OnPageChangeListener() {
             @Override
@@ -79,7 +87,7 @@ public class BannerViewPager extends ViewPager {
 
             @Override
             public void onPageSelected(int position) {
-
+                isScroll=false;
             }
 
             @Override
@@ -93,22 +101,39 @@ public class BannerViewPager extends ViewPager {
                         BannerViewPager.this.setCurrentItem(1,false);
                     }
                 }
+                isScroll=state!=ViewPager.SCROLL_STATE_IDLE;
             }
         });
         this.setCurrentItem(1);
-//        try {
-//            Field field=ViewPager.class.getDeclaredField("mScroller");
-//            field.setAccessible(true);
-//            Field field1=ViewPager.class.getDeclaredField("sInterpolator");
-//            Interpolator interpolator= (Interpolator) field1.get(this);
-//            MyScroller scroller=new MyScroller(mContext,interpolator);
-////            scroller.setmDuration(2000);
-//            field.set(this,scroller);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Field field=ViewPager.class.getDeclaredField("mScroller");
+            field.setAccessible(true);
+            MyScroller scroller=new MyScroller(mContext);
+            scroller.setmDuration(1200);
+            field.set(this,scroller);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         moveThread.start();
+        this.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        isMoving=false;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        isMoving=false;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        isMoving=true;
+                        break;
+                }
+                return false;
+            }
+        });
     }
+
 
     public BannerViewPager setDuration(int duration) {
         this.duration = duration;
@@ -161,7 +186,7 @@ public class BannerViewPager extends ViewPager {
 
     private class MyScroller extends Scroller{
 
-        private int mDuration=800;
+        private int mDuration=1200;
         public MyScroller(Context context) {
             super(context);
         }
