@@ -65,15 +65,17 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         if (mViewPager == null) {
             return;
         }
-        final int count = mViewPager.getAdapter().getCount()-2;
+        int count = mViewPager.getAdapter().getCount();
         if (count == 0) {
             return;
+        }else if (count>2){
+            count-=2;
         }
 
-        if (mCurrentPage >= count) {
-            setCurrentItem(count-1,true);
-            return;
-        }
+//        if (mCurrentPage >= count) {
+//            setCurrentItem(count-1,true);
+//            return;
+//        }
 
         int width = getWidth();
         int paddingLeft = getPaddingLeft();
@@ -173,11 +175,22 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mCurrentPage = position;
-        if (mCurrentPage==1){
-            mCurrentPage=0;
-        }else if (mCurrentPage==mViewPager.getAdapter().getCount()-1){
+        if (mCurrentPage==0){
             mCurrentPage=mViewPager.getAdapter().getCount()-2;
+        }else if (mCurrentPage>0&&mCurrentPage<=mViewPager.getAdapter().getCount()-2){
+            mCurrentPage--;
+        }else if (mCurrentPage==mViewPager.getAdapter().getCount()-1){
+            mCurrentPage=1;
         }
+//        if (mCurrentPage==1){
+//            mCurrentPage=0;
+//        }else if (mCurrentPage==mViewPager.getAdapter().getCount()-1){
+//            mCurrentPage=1;
+//        }else if(mCurrentPage>0){
+//            mCurrentPage--;
+//        }else if (mCurrentPage==0){
+//            mCurrentPage=mViewPager.getAdapter().getCount()-2;
+//        }
         mPageOffset = positionOffset;
         //如果指示器跟随ViewPager缓慢滑动，那么滚动是时候都绘制界面
         if (mIsFollow) {
